@@ -1,0 +1,114 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+*.manifest
+*.spec
+pip-log.txt
+pip-delete-this-directory.txt
+.venv
+venv/
+ENV/
+env/
+
+# CUDA
+*.i
+*.ii
+*.gpu
+*.ptx
+*.cubin
+*.fatbin
+*.o
+*.so
+*.a
+*.lib
+*.exe
+*.out
+*.app
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# PyTorch
+*.pth
+*.pt
+*.ckpt
+checkpoints/
+runs/
+logs/
+
+# TensorRT
+*.engine
+*.plan
+*.onnx
+*.trt
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.eslintcache
+.node_repl_history
+*.tgz
+.yarn-integrity
+.env
+.env.test
+.cache
+.next
+.nuxt
+dist
+.cache/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Data
+data/
+datasets/
+*.csv
+*.h5
+*.hdf5
+*.pkl
+*.pickle
+
+# Models
+models/
+weights/
+*.weights
+*.caffemodel
+
+# Logs
+*.log
+logs/
+tensorboard/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
