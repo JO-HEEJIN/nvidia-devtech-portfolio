@@ -39,8 +39,9 @@ Optimize deep learning models using NVIDIA TensorRT for production deployment wi
 
 [Kaggle Demo](https://www.kaggle.com/code/dubito/pytorch-to-tensorrt-optimization)
 
-![Results Image](/Users/user/NVDIA/nvidia-devtech-portfolio/projects/01-tensorrt-optimization/plots/__results___18_1.png)
-
+![Results Image1](/Users/user/NVDIA/nvidia-devtech-portfolio/projects/01-tensorrt-optimization/plots/__results___18_1.png),
+![Results Image2](/Users/user/NVDIA/nvidia-devtech-portfolio/projects/01-tensorrt-optimization/plots/__results___19_1.png),
+![Results Image3](/Users/user/NVDIA/nvidia-devtech-portfolio/projects/01-tensorrt-optimization/plots/__results___20_1.png)
 
 
 ### 2. CUDA Matrix Multiplication
