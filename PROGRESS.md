@@ -10,19 +10,19 @@ Application Deadline: TBD
 
 | Category | Status | Progress | Priority |
 |----------|--------|----------|----------|
-| Portfolio Projects | Not Started | 0/8 | High |
-| Resume | Not Started | 0% | High |
+| Portfolio Projects | Not Started | 1/8 | High |
+| Resume | Not Started | 60% | High |
 | Cover Letter | Not Started | 0% | High |
-| Interview Prep | In Progress | 25% | High |
+| Interview Prep | In Progress | 5% | High |
 | Website Redesign | Not Started | 0% | Medium |
-| Documentation | Not Started | 0% | Low |
+| Documentation | Not Started | 20% | Low |
 
 ---
 
-## Portfolio Projects (0/8 Completed)
+## Portfolio Projects (1/8 Completed)
 
 ### 01. TensorRT Optimization
-- Status: Not Started
+- Status: Completed
 - Focus: Model optimization, layer fusion, precision calibration
 - Tech Stack: TensorRT, CUDA, Python, ONNX
 

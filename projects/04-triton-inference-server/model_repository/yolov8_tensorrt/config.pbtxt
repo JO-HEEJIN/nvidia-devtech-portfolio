@@ -1,0 +1,66 @@
+name: "yolov8_tensorrt"
+platform: "tensorrt_plan"
+max_batch_size: 8
+default_model_filename: "model.plan"
+
+input [
+  {
+    name: "images"
+    data_type: TYPE_FP32
+    format: FORMAT_NCHW
+    dims: [ 3, 640, 640 ]
+    reshape: { shape: [ 3, 640, 640 ] }
+  }
+]
+
+output [
+  {
+    name: "output0"
+    data_type: TYPE_FP32
+    dims: [ -1, 84 ]
+    reshape: { shape: [ -1, 84 ] }
+  }
+]
+
+instance_group [
+  {
+    count: 1
+    kind: KIND_GPU
+    gpus: [ 0 ]
+  }
+]
+
+dynamic_batching {
+  max_queue_delay_microseconds: 500
+  preferred_batch_size: [ 2, 4, 8 ]
+  preserve_ordering: false
+}
+
+version_policy: { all: {} }
+
+model_warmup [
+  {
+    name: "batch_1"
+    batch_size: 1
+    inputs {
+      key: "images"
+      value: {
+        data_type: TYPE_FP32
+        dims: [ 3, 640, 640 ]
+        zero_data: true
+      }
+    }
+  },
+  {
+    name: "batch_4"
+    batch_size: 4
+    inputs {
+      key: "images"
+      value: {
+        data_type: TYPE_FP32
+        dims: [ 3, 640, 640 ]
+        zero_data: true
+      }
+    }
+  }
+]

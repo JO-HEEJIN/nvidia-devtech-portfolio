@@ -166,7 +166,7 @@ if __name__ == "__main__":
             print("Cloning repository...")
             subprocess.run([
                 "git", "clone", 
-                "https://github.com/midmost44/nvidia-devtech-portfolio.git",  # Use actual username
+                "https://github.com/JO-HEEJIN/nvidia-devtech-portfolio.git",
                 "/content/nvidia-devtech-portfolio"
             ], check=True)
         else:

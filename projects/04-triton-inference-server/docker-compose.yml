@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  triton-server:
+    image: nvcr.io/nvidia/tritonserver:24.05-py3
+    container_name: triton-inference-server
+    ports:
+      - "8000:8000"  # HTTP
+      - "8001:8001"  # gRPC
+      - "8002:8002"  # Metrics
+    volumes:
+      - ./model_repository:/models
+      - triton-cache:/opt/tritonserver/cache
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
+    command: [
+      "tritonserver",
+      "--model-repository=/models",
+      "--model-control-mode=explicit",
+      "--strict-model-config=false",
+      "--http-port=8000",
+      "--grpc-port=8001",
+      "--metrics-port=8002",
+      "--allow-http=true",
+      "--allow-grpc=true",
+      "--allow-metrics=true",
+      "--log-verbose=1",
+      "--backend-config=tensorflow,version=2",
+      "--backend-config=onnxruntime_onnx,use_cuda=1",
+      "--backend-config=pytorch,enable_weight_sharing=true"
+    ]
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/v2/health/ready"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    networks:
+      - triton-network
+
+volumes:
+  triton-cache:
+    driver: local
+
+networks:
+  triton-network:
+    driver: bridge
