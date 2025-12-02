@@ -1,8 +1,8 @@
 # Core Dependencies
 torch>=2.0.0
 torchvision>=0.15.0
-tensorrt>=8.6.0
-pycuda>=2022.1
+# tensorrt>=8.6.0  # Commented out: Not available for macOS
+# pycuda>=2022.1   # Commented out: Requires NVIDIA GPU drivers
 
 # ONNX Support
 onnx>=1.14.0
@@ -18,8 +18,8 @@ matplotlib>=3.7.0
 seaborn>=0.12.0
 
 # GPU Monitoring
-pynvml>=11.5.0
-gpustat>=1.1.0
+# pynvml>=11.5.0   # Commented out: Requires NVIDIA GPU drivers
+# gpustat>=1.1.0   # Commented out: Requires NVIDIA GPU drivers
 
 # Data Processing
 pillow>=10.0.0

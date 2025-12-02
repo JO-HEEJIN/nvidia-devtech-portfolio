@@ -37,6 +37,12 @@ nvidia-devtech-portfolio/
 ### 1. TensorRT Optimization
 Optimize deep learning models using NVIDIA TensorRT for production deployment with layer fusion and precision calibration.
 
+[Kaggle Demo](https://www.kaggle.com/code/dubito/pytorch-to-tensorrt-optimization)
+
+![Results Image](/Users/user/NVDIA/nvidia-devtech-portfolio/projects/01-tensorrt-optimization/plots/__results___18_1.png)
+
+
+
 ### 2. CUDA Matrix Multiplication
 Implement optimized matrix multiplication demonstrating GPU architecture understanding and parallel computing principles.
 

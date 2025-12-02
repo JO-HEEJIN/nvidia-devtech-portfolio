@@ -1,0 +1,89 @@
+name: "bert_onnx"
+platform: "onnxruntime_onnx"
+max_batch_size: 32
+default_model_filename: "model.onnx"
+
+input [
+  {
+    name: "input_ids"
+    data_type: TYPE_INT64
+    dims: [ 128 ]
+    reshape: { shape: [ 128 ] }
+  },
+  {
+    name: "attention_mask"
+    data_type: TYPE_INT64
+    dims: [ 128 ]
+    reshape: { shape: [ 128 ] }
+  }
+]
+
+output [
+  {
+    name: "logits"
+    data_type: TYPE_FP32
+    dims: [ 2 ]
+    reshape: { shape: [ 2 ] }
+  }
+]
+
+instance_group [
+  {
+    count: 2
+    kind: KIND_GPU
+    gpus: [ 0 ]
+  }
+]
+
+dynamic_batching {
+  max_queue_delay_microseconds: 2000
+  preferred_batch_size: [ 8, 16, 32 ]
+  preserve_ordering: true
+}
+
+version_policy: { all: {} }
+
+optimization {
+  execution_accelerators {
+    gpu_execution_accelerator [
+      {
+        name: "onnxruntime"
+        parameters {
+          key: "provider"
+          value: "CUDAExecutionProvider"
+        }
+        parameters {
+          key: "device_id"
+          value: "0"
+        }
+        parameters {
+          key: "cuda_mem_limit"
+          value: "2147483648"
+        }
+      }
+    ]
+  }
+}
+
+model_warmup [
+  {
+    name: "sequence_classification"
+    batch_size: 1
+    inputs {
+      key: "input_ids"
+      value: {
+        data_type: TYPE_INT64
+        dims: [ 128 ]
+        zero_data: true
+      }
+    }
+    inputs {
+      key: "attention_mask"
+      value: {
+        data_type: TYPE_INT64
+        dims: [ 128 ]
+        zero_data: true
+      }
+    }
+  }
+]

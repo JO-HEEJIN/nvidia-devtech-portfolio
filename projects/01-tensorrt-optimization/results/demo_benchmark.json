@@ -1,0 +1,168 @@
+{
+  "metadata": {
+    "model": "resnet18",
+    "input_size": [
+      224,
+      224
+    ],
+    "batch_sizes": [
+      1,
+      2,
+      4
+    ],
+    "timestamp": "2025-12-02 19:18:16",
+    "gpu": "Tesla T4"
+  },
+  "benchmarks": {
+    "batch_1": {
+      "pytorch": {
+        "fp32": {
+          "mean_latency_ms": 3.9467065000280854,
+          "std_latency_ms": 0.08915824472367137,
+          "min_latency_ms": 3.875280000102066,
+          "max_latency_ms": 4.181280000011611,
+          "p50_latency_ms": 3.9182480001045406,
+          "p95_latency_ms": 4.107005250000384,
+          "p99_latency_ms": 4.166425050009366,
+          "throughput_fps": 253.37582107838114,
+          "memory_used_mb": 46.0
+        },
+        "fp16": {
+          "mean_latency_ms": 3.5802390000299056,
+          "std_latency_ms": 0.06989139084636363,
+          "min_latency_ms": 3.437850999944203,
+          "max_latency_ms": 3.7184050001997093,
+          "p50_latency_ms": 3.5844205000330476,
+          "p95_latency_ms": 3.6847081000814796,
+          "p99_latency_ms": 3.7116656201760634,
+          "throughput_fps": 279.31096219879373,
+          "memory_used_mb": 2.0
+        }
+      },
+      "tensorrt_fp16": {
+        "mean_latency_ms": 1.7609813000035501,
+        "std_latency_ms": 0.01756773264298233,
+        "min_latency_ms": 1.7403010001544317,
+        "max_latency_ms": 1.7939669999122998,
+        "p50_latency_ms": 1.7552559999103323,
+        "p95_latency_ms": 1.7875522500162333,
+        "p99_latency_ms": 1.7926840499330865,
+        "throughput_fps": 567.8652010660102,
+        "engine_memory_mb": 4.624267578125,
+        "memory_used_mb": 0.0
+      },
+      "tensorrt_fp32": {
+        "mean_latency_ms": 4.500063299997237,
+        "std_latency_ms": 0.013413483611384351,
+        "min_latency_ms": 4.4859209999685845,
+        "max_latency_ms": 4.520549000062601,
+        "p50_latency_ms": 4.493979000017134,
+        "p95_latency_ms": 4.5195369500220295,
+        "p99_latency_ms": 4.520346590054487,
+        "throughput_fps": 222.2190963404035,
+        "engine_memory_mb": 4.624267578125,
+        "memory_used_mb": 0.0
+      }
+    },
+    "batch_2": {
+      "pytorch": {
+        "fp32": {
+          "mean_latency_ms": 5.13454849997288,
+          "std_latency_ms": 0.016952552817205407,
+          "min_latency_ms": 5.119289000049321,
+          "max_latency_ms": 5.1740760000029695,
+          "p50_latency_ms": 5.127185999981521,
+          "p95_latency_ms": 5.1634609500183615,
+          "p99_latency_ms": 5.171952990006048,
+          "throughput_fps": 389.51818256475013,
+          "memory_used_mb": 50.0
+        },
+        "fp16": {
+          "mean_latency_ms": 3.620375600007719,
+          "std_latency_ms": 0.07164878887916502,
+          "min_latency_ms": 3.511242000058701,
+          "max_latency_ms": 3.7368890000379906,
+          "p50_latency_ms": 3.640755999981593,
+          "p95_latency_ms": 3.709947499999089,
+          "p99_latency_ms": 3.7315007000302103,
+          "throughput_fps": 552.4288695337953,
+          "memory_used_mb": 6.0
+        }
+      },
+      "tensorrt_fp16": {
+        "mean_latency_ms": 1.9781523000347079,
+        "std_latency_ms": 0.026224543936392387,
+        "min_latency_ms": 1.9543790001534944,
+        "max_latency_ms": 2.0423270000264893,
+        "p50_latency_ms": 1.9679470000255606,
+        "p95_latency_ms": 2.027719100010472,
+        "p99_latency_ms": 2.039405420023286,
+        "throughput_fps": 505.5222492132959,
+        "engine_memory_mb": 4.624267578125,
+        "memory_used_mb": 0.0
+      },
+      "tensorrt_fp32": {
+        "mean_latency_ms": 5.223951600009968,
+        "std_latency_ms": 0.04213343778716051,
+        "min_latency_ms": 5.180516999871543,
+        "max_latency_ms": 5.3337660001488985,
+        "p50_latency_ms": 5.212180000057742,
+        "p95_latency_ms": 5.298924750059086,
+        "p99_latency_ms": 5.326797750130936,
+        "throughput_fps": 191.4259695664278,
+        "engine_memory_mb": 4.624267578125,
+        "memory_used_mb": 0.0
+      }
+    },
+    "batch_4": {
+      "pytorch": {
+        "fp32": {
+          "mean_latency_ms": 8.692963099974804,
+          "std_latency_ms": 0.009796705150864025,
+          "min_latency_ms": 8.676409999907264,
+          "max_latency_ms": 8.705450999968889,
+          "p50_latency_ms": 8.694065499867065,
+          "p95_latency_ms": 8.704492049980672,
+          "p99_latency_ms": 8.705259209971246,
+          "throughput_fps": 460.1422960154511,
+          "memory_used_mb": 58.0
+        },
+        "fp16": {
+          "mean_latency_ms": 4.574695599922052,
+          "std_latency_ms": 0.006705288733927349,
+          "min_latency_ms": 4.565070999888121,
+          "max_latency_ms": 4.58677199981139,
+          "p50_latency_ms": 4.574864000005618,
+          "p95_latency_ms": 4.584647999865865,
+          "p99_latency_ms": 4.586347199822285,
+          "throughput_fps": 874.3751169079219,
+          "memory_used_mb": 24.0
+        }
+      },
+      "tensorrt_fp16": {
+        "mean_latency_ms": 2.6794224999548533,
+        "std_latency_ms": 0.04745424559784684,
+        "min_latency_ms": 2.6343479999013653,
+        "max_latency_ms": 2.7901849998670514,
+        "p50_latency_ms": 2.6664449999316275,
+        "p95_latency_ms": 2.7704425999218074,
+        "p99_latency_ms": 2.7862365198780026,
+        "throughput_fps": 373.2147505728751,
+        "engine_memory_mb": 4.624267578125,
+        "memory_used_mb": 0.0
+      },
+      "tensorrt_fp32": {
+        "mean_latency_ms": 7.3557350000101,
+        "std_latency_ms": 0.07568349476031046,
+        "min_latency_ms": 7.3010050000448246,
+        "max_latency_ms": 7.544563999999809,
+        "p50_latency_ms": 7.319700999914858,
+        "p95_latency_ms": 7.503299000006791,
+        "p99_latency_ms": 7.536311000001206,
+        "throughput_fps": 135.94834506662175,
+        "engine_memory_mb": 4.624267578125,
+        "memory_used_mb": 0.0
+      }
+    }
+  }
+}

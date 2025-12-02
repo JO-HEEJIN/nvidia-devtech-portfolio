@@ -1,0 +1,20 @@
+TensorRT Optimization Demo - Kaggle
+==================================================
+Model: resnet18
+Input Size: (224, 224)
+GPU: Tesla T4
+
+Performance Results:
+
+batch_1:
+  PyTorch FP32: 3.95 ms
+  TensorRT FP32: 4.50 ms
+  TensorRT FP16: 1.76 ms
+batch_2:
+  PyTorch FP32: 5.13 ms
+  TensorRT FP32: 5.22 ms
+  TensorRT FP16: 1.98 ms
+batch_4:
+  PyTorch FP32: 8.69 ms
+  TensorRT FP32: 7.36 ms
+  TensorRT FP16: 2.68 ms

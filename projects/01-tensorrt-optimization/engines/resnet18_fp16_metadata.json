@@ -1,0 +1,26 @@
+{
+  "tensorrt_version": "10.11.0.33",
+  "engine_size_mb": 24.03213119506836,
+  "tensors": [
+    {
+      "name": "input",
+      "mode": "INPUT",
+      "shape": [
+        -1,
+        3,
+        224,
+        224
+      ],
+      "dtype": "DataType.FLOAT"
+    },
+    {
+      "name": "output",
+      "mode": "OUTPUT",
+      "shape": [
+        -1,
+        1000
+      ],
+      "dtype": "DataType.FLOAT"
+    }
+  ]
+}
