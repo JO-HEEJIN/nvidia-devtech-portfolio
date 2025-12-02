@@ -160,13 +160,20 @@ if __name__ == "__main__":
         IN_COLAB = False
     
     if IN_COLAB:
-        # Clone repository
-        print("Cloning repository...")
-        subprocess.run([
-            "git", "clone", 
-            "https://github.com/[your-username]/nvidia-devtech-portfolio.git",
-            "/content/nvidia-devtech-portfolio"
-        ], check=True)
+        # Check if repo already exists
+        import os
+        if not os.path.exists('/content/nvidia-devtech-portfolio'):
+            print("Cloning repository...")
+            subprocess.run([
+                "git", "clone", 
+                "https://github.com/midmost44/nvidia-devtech-portfolio.git",  # Use actual username
+                "/content/nvidia-devtech-portfolio"
+            ], check=True)
+        else:
+            print("Repository already exists. Pulling latest changes...")
+            subprocess.run([
+                "git", "-C", "/content/nvidia-devtech-portfolio", "pull"
+            ], check=True)
         
         # Setup and run
         setup_environment()
