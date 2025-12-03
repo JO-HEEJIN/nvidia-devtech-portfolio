@@ -1,0 +1,83 @@
+# TinyLlama FP16 Configuration for TensorRT-LLM
+# High precision configuration with minimal quantization
+
+model:
+  name: "TinyLlama-1.1B-Chat-v1.0"
+  hf_model_name: "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
+  architecture: "llama"
+  vocab_size: 32000
+  hidden_size: 2048
+  num_layers: 22
+  num_heads: 32
+  num_kv_heads: 4
+  intermediate_size: 5632
+  max_position_embeddings: 2048
+  rope_base: 10000.0
+  norm_epsilon: 1e-5
+
+quantization:
+  mode: "fp16"
+  precision: "float16"
+  kv_cache_precision: "fp16"
+  use_weight_only: false
+  weight_only_precision: null
+  activation_precision: "fp16"
+  
+engine:
+  max_batch_size: 8
+  max_input_len: 1024
+  max_output_len: 512
+  max_seq_len: 2048
+  max_beam_width: 1
+  
+  # Memory optimization
+  use_gpt_attention_plugin: true
+  use_gemm_plugin: true
+  use_lookup_plugin: true
+  use_lora_plugin: false
+  
+  # KV Cache optimization
+  enable_kv_cache: true
+  kv_cache_free_gpu_mem_fraction: 0.9
+  use_paged_kv_cache: true
+  tokens_per_block: 64
+  
+  # Performance optimization
+  use_inflight_batching: true
+  enable_chunked_context: false
+  max_tokens_in_paged_kv_cache: 8192
+
+optimization:
+  # Attention optimization
+  multi_block_mode: false
+  enable_xqa: true
+  use_custom_all_reduce: false
+  
+  # Memory optimization
+  remove_input_padding: true
+  use_packed_input: true
+  
+  # Generation optimization
+  use_parallel_embedding: false
+  share_embedding_table: false
+
+runtime:
+  # Memory management
+  cuda_graph_mode: false
+  stream_batch_size: 1
+  
+  # Debug and profiling
+  enable_debug_output: false
+  log_level: "info"
+  
+  # Temperature and sampling
+  temperature: 1.0
+  top_k: 50
+  top_p: 0.9
+  repetition_penalty: 1.1
+
+paths:
+  model_dir: "./models/tinyllama_fp16"
+  engine_dir: "./engines/tinyllama_fp16"
+  tokenizer_dir: "./tokenizers/tinyllama"
+  output_dir: "./outputs/tinyllama_fp16"
