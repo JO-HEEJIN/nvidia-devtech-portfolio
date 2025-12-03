@@ -1,0 +1,109 @@
+# TinyLlama INT8 Configuration for TensorRT-LLM
+# Weight-only INT8 quantization (W8A16) for improved throughput
+
+model:
+  name: "TinyLlama-1.1B-Chat-v1.0"
+  hf_model_name: "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
+  architecture: "llama"
+  vocab_size: 32000
+  hidden_size: 2048
+  num_layers: 22
+  num_heads: 32
+  num_kv_heads: 4
+  intermediate_size: 5632
+  max_position_embeddings: 2048
+  rope_base: 10000.0
+  norm_epsilon: 1e-5
+
+quantization:
+  mode: "int8_weight_only"
+  precision: "int8"
+  kv_cache_precision: "int8"
+  use_weight_only: true
+  weight_only_precision: "int8"
+  activation_precision: "fp16"
+  
+  # INT8 specific settings
+  calibration_dataset: "pileval"
+  calibration_samples: 512
+  percentile: 99.99
+  
+  # Quantization strategy
+  quant_algo: "W8A16"
+  use_smooth_quant: false
+  smooth_quant_alpha: 0.5
+  
+engine:
+  max_batch_size: 16
+  max_input_len: 1024
+  max_output_len: 512
+  max_seq_len: 2048
+  max_beam_width: 1
+  
+  # Memory optimization (better with INT8)
+  use_gpt_attention_plugin: true
+  use_gemm_plugin: true
+  use_lookup_plugin: true
+  use_lora_plugin: false
+  
+  # KV Cache optimization
+  enable_kv_cache: true
+  kv_cache_free_gpu_mem_fraction: 0.85
+  use_paged_kv_cache: true
+  tokens_per_block: 128
+  
+  # Performance optimization
+  use_inflight_batching: true
+  enable_chunked_context: false
+  max_tokens_in_paged_kv_cache: 12288
+
+optimization:
+  # Attention optimization
+  multi_block_mode: true
+  enable_xqa: true
+  use_custom_all_reduce: false
+  
+  # Memory optimization
+  remove_input_padding: true
+  use_packed_input: true
+  
+  # INT8 specific optimizations
+  enable_fp8_qdq: false
+  use_int8_kv_cache: true
+  
+  # Generation optimization
+  use_parallel_embedding: false
+  share_embedding_table: false
+
+runtime:
+  # Memory management
+  cuda_graph_mode: false
+  stream_batch_size: 2
+  
+  # Debug and profiling
+  enable_debug_output: false
+  log_level: "info"
+  
+  # Temperature and sampling
+  temperature: 1.0
+  top_k: 50
+  top_p: 0.9
+  repetition_penalty: 1.1
+
+calibration:
+  # Dataset for calibration
+  dataset_name: "NeelNanda/pile-10k"
+  num_samples: 512
+  max_length: 2048
+  
+  # Calibration settings
+  batch_size: 1
+  use_cache: true
+  cache_dir: "./calibration_cache"
+
+paths:
+  model_dir: "./models/tinyllama_int8"
+  engine_dir: "./engines/tinyllama_int8"
+  tokenizer_dir: "./tokenizers/tinyllama"
+  output_dir: "./outputs/tinyllama_int8"
+  calibration_dir: "./calibration/tinyllama_int8"

@@ -1,0 +1,136 @@
+# TinyLlama INT4 Configuration for TensorRT-LLM
+# Weight-only INT4 quantization (W4A16) for maximum throughput
+
+model:
+  name: "TinyLlama-1.1B-Chat-v1.0"
+  hf_model_name: "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
+  architecture: "llama"
+  vocab_size: 32000
+  hidden_size: 2048
+  num_layers: 22
+  num_heads: 32
+  num_kv_heads: 4
+  intermediate_size: 5632
+  max_position_embeddings: 2048
+  rope_base: 10000.0
+  norm_epsilon: 1e-5
+
+quantization:
+  mode: "int4_weight_only"
+  precision: "int4"
+  kv_cache_precision: "int8"
+  use_weight_only: true
+  weight_only_precision: "int4"
+  activation_precision: "fp16"
+  
+  # INT4 specific settings
+  calibration_dataset: "pileval"
+  calibration_samples: 512
+  percentile: 99.99
+  
+  # Quantization strategy (AWQ or GPTQ style)
+  quant_algo: "W4A16_AWQ"
+  use_awq: true
+  awq_block_size: 128
+  group_size: 128
+  
+  # Alternative GPTQ settings
+  use_gptq: false
+  gptq_block_size: 128
+  gptq_desc_act: false
+  gptq_group_size: 128
+  
+engine:
+  max_batch_size: 32
+  max_input_len: 1024
+  max_output_len: 512
+  max_seq_len: 2048
+  max_beam_width: 1
+  
+  # Memory optimization (aggressive with INT4)
+  use_gpt_attention_plugin: true
+  use_gemm_plugin: true
+  use_lookup_plugin: true
+  use_lora_plugin: false
+  
+  # KV Cache optimization
+  enable_kv_cache: true
+  kv_cache_free_gpu_mem_fraction: 0.8
+  use_paged_kv_cache: true
+  tokens_per_block: 256
+  
+  # Performance optimization
+  use_inflight_batching: true
+  enable_chunked_context: true
+  max_tokens_in_paged_kv_cache: 16384
+
+optimization:
+  # Attention optimization
+  multi_block_mode: true
+  enable_xqa: true
+  use_custom_all_reduce: false
+  
+  # Memory optimization
+  remove_input_padding: true
+  use_packed_input: true
+  
+  # INT4 specific optimizations
+  enable_fp8_qdq: false
+  use_int8_kv_cache: true
+  use_weight_streaming: true
+  
+  # Generation optimization
+  use_parallel_embedding: true
+  share_embedding_table: true
+
+runtime:
+  # Memory management (more aggressive)
+  cuda_graph_mode: true
+  stream_batch_size: 4
+  
+  # Debug and profiling
+  enable_debug_output: false
+  log_level: "info"
+  
+  # Temperature and sampling
+  temperature: 1.0
+  top_k: 50
+  top_p: 0.9
+  repetition_penalty: 1.1
+
+calibration:
+  # Dataset for calibration
+  dataset_name: "NeelNanda/pile-10k"
+  num_samples: 1024
+  max_length: 2048
+  
+  # Calibration settings for INT4
+  batch_size: 1
+  use_cache: true
+  cache_dir: "./calibration_cache"
+  
+  # AWQ specific calibration
+  awq_alpha: 0.5
+  awq_clip_alpha: 1.0
+  awq_calib_size: 32
+
+quantization_advanced:
+  # Advanced INT4 settings
+  symmetric: false
+  group_wise: true
+  channel_wise: false
+  
+  # Error handling
+  exclude_layers: []
+  force_quantize: false
+  
+  # Optimization flags
+  optimize_for_throughput: true
+  optimize_for_latency: false
+
+paths:
+  model_dir: "./models/tinyllama_int4"
+  engine_dir: "./engines/tinyllama_int4"
+  tokenizer_dir: "./tokenizers/tinyllama"
+  output_dir: "./outputs/tinyllama_int4"
+  calibration_dir: "./calibration/tinyllama_int4"
