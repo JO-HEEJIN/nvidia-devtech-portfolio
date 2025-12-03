@@ -1,0 +1,143 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    monitor: 'triton-monitor'
+    environment: 'production'
+
+scrape_configs:
+  - job_name: 'triton-inference-server'
+    static_configs:
+      - targets: ['triton:8002']
+        labels:
+          service: 'triton'
+          instance: 'primary'
+    
+    metrics_path: '/metrics'
+    scrape_interval: 5s
+    scrape_timeout: 10s
+    
+    metric_relabel_configs:
+      - source_labels: [__name__]
+        regex: 'go_.*'
+        action: drop
+
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['node-exporter:9100']
+        labels:
+          service: 'node-exporter'
+    
+    scrape_interval: 10s
+
+  - job_name: 'nvidia-dcgm'
+    static_configs:
+      - targets: ['dcgm-exporter:9400']
+        labels:
+          service: 'nvidia-gpu'
+    
+    scrape_interval: 5s
+    metric_relabel_configs:
+      - source_labels: [__name__]
+        regex: 'DCGM_.*'
+        target_label: __name__
+        replacement: 'gpu_${1}'
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: []
+
+rule_files:
+  - '/etc/prometheus/rules/*.yml'
+
+remote_write:
+  - url: 'http://prometheus-pushgateway:9091/metrics/job/triton_batch'
+    write_relabel_configs:
+      - source_labels: [__name__]
+        regex: 'nv_inference_request_success.*'
+        action: keep
+
+recording_rules:
+  - name: triton_aggregates
+    interval: 30s
+    rules:
+      - record: triton:inference_rate
+        expr: rate(nv_inference_request_success[1m])
+      
+      - record: triton:avg_latency_ms
+        expr: rate(nv_inference_request_duration_us[1m]) / rate(nv_inference_request_success[1m]) / 1000
+      
+      - record: triton:queue_time_ms
+        expr: rate(nv_inference_queue_duration_us[1m]) / rate(nv_inference_request_success[1m]) / 1000
+      
+      - record: triton:throughput
+        expr: sum(rate(nv_inference_request_success[1m])) by (model, version)
+      
+      - record: triton:batch_size_avg
+        expr: rate(nv_inference_request_summary_us_sum[1m]) / rate(nv_inference_request_summary_us_count[1m])
+      
+      - record: gpu:utilization_percent
+        expr: avg(DCGM_FI_DEV_GPU_UTIL) by (gpu, UUID)
+      
+      - record: gpu:memory_used_bytes
+        expr: DCGM_FI_DEV_FB_USED * 1024 * 1024
+      
+      - record: gpu:temperature_celsius
+        expr: DCGM_FI_DEV_GPU_TEMP
+
+alerts:
+  - name: triton_alerts
+    rules:
+      - alert: HighInferenceLatency
+        expr: triton:avg_latency_ms > 100
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High inference latency detected"
+          description: "Average inference latency is {{ $value }}ms for model {{ $labels.model }}"
+      
+      - alert: LowThroughput
+        expr: triton:throughput < 10
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Low inference throughput"
+          description: "Throughput is {{ $value }} req/s for model {{ $labels.model }}"
+      
+      - alert: HighQueueTime
+        expr: triton:queue_time_ms > 50
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High queue time detected"
+          description: "Queue time is {{ $value }}ms, indicating potential bottleneck"
+      
+      - alert: GPUHighTemperature
+        expr: gpu:temperature_celsius > 85
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "GPU temperature critical"
+          description: "GPU {{ $labels.gpu }} temperature is {{ $value }}°C"
+      
+      - alert: GPUMemoryExhaustion
+        expr: (gpu:memory_used_bytes / DCGM_FI_DEV_FB_TOTAL) > 0.95
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "GPU memory nearly exhausted"
+          description: "GPU {{ $labels.gpu }} memory usage is {{ $value }}%"
+      
+      - alert: ModelLoadFailure
+        expr: increase(nv_inference_request_failure[5m]) > 10
+        labels:
+          severity: critical
+        annotations:
+          summary: "Model inference failures detected"
+          description: "Model {{ $labels.model }} has {{ $value }} failures in last 5 minutes"
