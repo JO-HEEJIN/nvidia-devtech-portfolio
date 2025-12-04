@@ -15,7 +15,7 @@ GPU_ARCH = -gencode arch=compute_70,code=sm_70 \
 
 # Compilation flags
 NVCC_FLAGS = $(GPU_ARCH) -O3 -std=c++14 -lineinfo
-CXX_FLAGS = -O3 -std=c++14 -fopenmp
+CXX_FLAGS = -O3 -std=c++14 -Xcompiler -fopenmp
 DEBUG_FLAGS = -g -G -O0 -DDEBUG
 
 # Include and library paths
@@ -61,7 +61,7 @@ $(BIN_DIR)/benchmark: $(SRC_DIR)/benchmark.cu $(SRC_DIR)/utils.cu
 
 # Debug builds
 debug: NVCC_FLAGS = $(GPU_ARCH) $(DEBUG_FLAGS) -std=c++14
-debug: CXX_FLAGS = $(DEBUG_FLAGS) -std=c++14 -fopenmp
+debug: CXX_FLAGS = $(DEBUG_FLAGS) -std=c++14 -Xcompiler -fopenmp
 debug: all
 
 # Individual debug targets
