@@ -30,14 +30,16 @@ BIN_DIR = bin
 # Create directories
 $(shell mkdir -p $(OBJ_DIR) $(BIN_DIR))
 
-# Targets
-TARGETS = $(BIN_DIR)/cpu_matmul \
-          $(BIN_DIR)/naive_matmul \
+# Targets (GPU only - cpu_matmul requires OpenMP which may not be available)
+TARGETS = $(BIN_DIR)/naive_matmul \
           $(BIN_DIR)/tiled_matmul \
           $(BIN_DIR)/optimized_matmul \
           $(BIN_DIR)/benchmark
 
 all: $(TARGETS)
+
+# CPU baseline (optional - requires OpenMP)
+cpu: $(BIN_DIR)/cpu_matmul
 
 # CPU baseline
 $(BIN_DIR)/cpu_matmul: $(SRC_DIR)/cpu_matmul.cpp $(SRC_DIR)/utils.cu
