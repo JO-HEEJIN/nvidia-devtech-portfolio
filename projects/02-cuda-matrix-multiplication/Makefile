@@ -57,9 +57,9 @@ $(BIN_DIR)/tiled_matmul: $(SRC_DIR)/tiled_matmul.cu $(SRC_DIR)/utils.cu
 $(BIN_DIR)/optimized_matmul: $(SRC_DIR)/optimized_matmul.cu $(SRC_DIR)/utils.cu
 	$(NVCC) $(NVCC_FLAGS) $(INCLUDES) $^ -o $@ $(LIBS)
 
-# Benchmark suite
-$(BIN_DIR)/benchmark: $(SRC_DIR)/benchmark.cu $(SRC_DIR)/utils.cu
-	$(NVCC) $(NVCC_FLAGS) $(INCLUDES) $^ -o $@ $(LIBS)
+# Benchmark suite - needs all kernel files for linking
+$(BIN_DIR)/benchmark: $(SRC_DIR)/benchmark.cu $(SRC_DIR)/utils.cu $(SRC_DIR)/naive_matmul.cu $(SRC_DIR)/tiled_matmul.cu $(SRC_DIR)/optimized_matmul.cu
+	$(NVCC) $(NVCC_FLAGS) $(INCLUDES) -DBENCHMARK_MODE $^ -o $@ $(LIBS)
 
 # Debug builds
 debug: NVCC_FLAGS = $(GPU_ARCH) $(DEBUG_FLAGS) -std=c++14
