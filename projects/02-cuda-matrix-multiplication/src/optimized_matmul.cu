@@ -21,20 +21,20 @@ void printMemoryInfo();
 // 3. Memory coalescing - consecutive threads access consecutive memory
 // 4. Loop unrolling - reduces loop overhead
 // 5. Bank conflict avoidance - padding shared memory arrays
-template <int BLOCK_SIZE, int WORK_PER_THREAD>
+template <int BLK_SIZE, int WORK_PER_THREAD>
 __global__ void optimizedMatrixMultiplyKernel(
     const float* __restrict__ A,
     const float* __restrict__ B,
     float* __restrict__ C,
     int N)
 {
-    // Thread block computes BLOCK_SIZE x BLOCK_SIZE tile of C
+    // Thread block computes BLK_SIZE x BLK_SIZE tile of C
     // Each thread computes WORK_PER_THREAD x WORK_PER_THREAD elements
     
     // Shared memory with padding to avoid bank conflicts
     // Padding by 1 ensures threads access different banks
-    __shared__ float As[BLOCK_SIZE][BLOCK_SIZE + 1];
-    __shared__ float Bs[BLOCK_SIZE][BLOCK_SIZE + 1];
+    __shared__ float As[BLK_SIZE][BLK_SIZE + 1];
+    __shared__ float Bs[BLK_SIZE][BLK_SIZE + 1];
     
     // Thread indices
     int tx = threadIdx.x;
@@ -43,7 +43,7 @@ __global__ void optimizedMatrixMultiplyKernel(
     int by = blockIdx.y;
     
     // Number of threads per block in each dimension
-    const int THREADS_PER_BLOCK = BLOCK_SIZE / WORK_PER_THREAD;
+    const int THREADS_PER_BLOCK = BLK_SIZE / WORK_PER_THREAD;
     
     // Each thread computes WORK_PER_THREAD x WORK_PER_THREAD elements
     // Use registers to accumulate results
@@ -59,11 +59,11 @@ __global__ void optimizedMatrixMultiplyKernel(
     }
     
     // Global memory indices for this block's tile of C
-    int cRow = by * BLOCK_SIZE;
-    int cCol = bx * BLOCK_SIZE;
+    int cRow = by * BLK_SIZE;
+    int cCol = bx * BLK_SIZE;
     
     // Loop over tiles of A and B
-    int numTiles = (N + BLOCK_SIZE - 1) / BLOCK_SIZE;
+    int numTiles = (N + BLK_SIZE - 1) / BLK_SIZE;
     
     for (int tile = 0; tile < numTiles; tile++) {
         // Collaborative loading with coalescing
@@ -75,7 +75,7 @@ __global__ void optimizedMatrixMultiplyKernel(
             int row = ty * WORK_PER_THREAD + i;
             int col = tx;
             int globalRow = cRow + row;
-            int globalCol = tile * BLOCK_SIZE + col;
+            int globalCol = tile * BLK_SIZE + col;
             
             if (globalRow < N && globalCol < N) {
                 As[row][col] = A[globalRow * N + globalCol];
@@ -89,7 +89,7 @@ __global__ void optimizedMatrixMultiplyKernel(
         for (int i = 0; i < WORK_PER_THREAD; i++) {
             int row = ty;
             int col = tx * WORK_PER_THREAD + i;
-            int globalRow = tile * BLOCK_SIZE + row;
+            int globalRow = tile * BLK_SIZE + row;
             int globalCol = cCol + col;
             
             if (globalRow < N && globalCol < N) {
@@ -105,7 +105,7 @@ __global__ void optimizedMatrixMultiplyKernel(
         // Compute partial products
         // Each thread computes WORK_PER_THREAD x WORK_PER_THREAD elements
         #pragma unroll
-        for (int k = 0; k < BLOCK_SIZE; k++) {
+        for (int k = 0; k < BLK_SIZE; k++) {
             // Load values from shared memory into registers
             float Areg[WORK_PER_THREAD];
             float Breg[WORK_PER_THREAD];
@@ -146,7 +146,7 @@ __global__ void optimizedMatrixMultiplyKernel(
 }
 
 // Vector-based optimized kernel for even better memory access
-template <int BLOCK_SIZE>
+template <int BLK_SIZE>
 __global__ void vectorizedMatrixMultiplyKernel(
     const float* __restrict__ A,
     const float* __restrict__ B,
@@ -154,8 +154,8 @@ __global__ void vectorizedMatrixMultiplyKernel(
     int N)
 {
     // Use float4 for vectorized loads/stores (128-bit transactions)
-    __shared__ float As[BLOCK_SIZE][BLOCK_SIZE + 1];
-    __shared__ float Bs[BLOCK_SIZE][BLOCK_SIZE + 1];
+    __shared__ float As[BLK_SIZE][BLK_SIZE + 1];
+    __shared__ float Bs[BLK_SIZE][BLK_SIZE + 1];
     
     int tx = threadIdx.x;
     int ty = threadIdx.y;
@@ -165,17 +165,17 @@ __global__ void vectorizedMatrixMultiplyKernel(
     // Accumulator
     float sum = 0.0f;
     
-    int row = by * BLOCK_SIZE + ty;
-    int col = bx * BLOCK_SIZE + tx;
+    int row = by * BLK_SIZE + ty;
+    int col = bx * BLK_SIZE + tx;
     
     // Prefetch first tile
-    if (row < N && tx < BLOCK_SIZE) {
+    if (row < N && tx < BLK_SIZE) {
         As[ty][tx] = A[row * N + tx];
     } else {
         As[ty][tx] = 0.0f;
     }
     
-    if (ty < BLOCK_SIZE && col < N) {
+    if (ty < BLK_SIZE && col < N) {
         Bs[ty][tx] = B[ty * N + col];
     } else {
         Bs[ty][tx] = 0.0f;
@@ -184,7 +184,7 @@ __global__ void vectorizedMatrixMultiplyKernel(
     __syncthreads();
     
     // Main computation loop
-    int numTiles = (N + BLOCK_SIZE - 1) / BLOCK_SIZE;
+    int numTiles = (N + BLK_SIZE - 1) / BLK_SIZE;
     
     for (int tile = 1; tile < numTiles; tile++) {
         // Double buffering: compute while loading next tile
@@ -192,7 +192,7 @@ __global__ void vectorizedMatrixMultiplyKernel(
         
         // Compute with current tile
         #pragma unroll 8
-        for (int k = 0; k < BLOCK_SIZE; k++) {
+        for (int k = 0; k < BLK_SIZE; k++) {
             tempSum += As[ty][k] * Bs[k][tx];
         }
         
@@ -200,8 +200,8 @@ __global__ void vectorizedMatrixMultiplyKernel(
         __syncthreads();
         
         // Load next tile
-        int aCol = tile * BLOCK_SIZE + tx;
-        int bRow = tile * BLOCK_SIZE + ty;
+        int aCol = tile * BLK_SIZE + tx;
+        int bRow = tile * BLK_SIZE + ty;
         
         if (row < N && aCol < N) {
             As[ty][tx] = A[row * N + aCol];
@@ -220,7 +220,7 @@ __global__ void vectorizedMatrixMultiplyKernel(
     
     // Compute last tile
     #pragma unroll 8
-    for (int k = 0; k < BLOCK_SIZE; k++) {
+    for (int k = 0; k < BLK_SIZE; k++) {
         sum += As[ty][k] * Bs[k][tx];
     }
     
