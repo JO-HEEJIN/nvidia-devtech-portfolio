@@ -230,6 +230,7 @@ __global__ void vectorizedMatrixMultiplyKernel(
     }
 }
 
+#ifndef BENCHMARK_MODE
 int main(int argc, char** argv) {
     int N = 1024;
     int blockSize = 32;
@@ -384,6 +385,7 @@ int main(int argc, char** argv) {
     freeDeviceMatrices(d_A, d_B, d_C);
     
     printf("\nOptimized implementation complete.\n");
-    
+
     return 0;
 }
+#endif // BENCHMARK_MODE
