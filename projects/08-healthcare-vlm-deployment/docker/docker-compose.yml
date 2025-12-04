@@ -1,0 +1,341 @@
+version: '3.8'
+
+# Healthcare VLM Deployment - Docker Compose Configuration
+# Production-ready containerized deployment with GPU support
+
+services:
+  # Main Healthcare VLM API Service
+  healthcare-vlm-api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      args:
+        - BUILDKIT_INLINE_CACHE=1
+    image: healthcare-vlm:latest
+    container_name: healthcare-vlm-api
+    restart: unless-stopped
+    
+    # Environment configuration
+    environment:
+      # Healthcare API settings
+      - HEALTHCARE_API_MODE=production
+      - LOG_LEVEL=INFO
+      - HIPAA_COMPLIANCE=enabled
+      
+      # Performance settings
+      - MAX_BATCH_SIZE=32
+      - DEFAULT_BACKEND=auto
+      - WORKERS=4
+      - PORT=8000
+      - TIMEOUT=300
+      - WARM_CACHE=true
+      
+      # CUDA settings
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+      - CUDA_LAUNCH_BLOCKING=0
+      - TORCH_CUDNN_V8_API_ENABLED=1
+      
+      # Memory optimization
+      - PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:128
+      - OMP_NUM_THREADS=4
+      
+      # Security settings
+      - PYTHONOPTIMIZE=1
+      - PYTHONUNBUFFERED=1
+      - PYTHONDONTWRITEBYTECODE=1
+    
+    # Port mapping
+    ports:
+      - "8000:8000"
+    
+    # GPU access (requires nvidia-docker)
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    
+    # Volume mounts for persistent data
+    volumes:
+      # Model storage
+      - healthcare_models:/app/models
+      - healthcare_onnx_models:/app/onnx_models  
+      - healthcare_tensorrt_engines:/app/tensorrt_engines
+      
+      # Logs and cache
+      - healthcare_logs:/app/logs
+      - healthcare_cache:/app/cache
+      
+      # Sample data for testing
+      - healthcare_sample_data:/app/sample_data
+      
+      # Results and benchmarks
+      - healthcare_results:/app/results
+      - healthcare_benchmarks:/app/benchmark_results
+    
+    # Health check configuration
+    healthcheck:
+      test: ["CMD", "python3", "/app/healthcheck.py"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 120s  # Allow time for model loading
+    
+    # Networking
+    networks:
+      - healthcare-network
+    
+    # Dependency management
+    depends_on:
+      - redis-cache
+      - monitoring
+    
+    # Logging configuration
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "5"
+        labels: "service=healthcare-vlm-api"
+    
+    # Security settings
+    security_opt:
+      - no-new-privileges:true
+    
+    # Resource limits
+    mem_limit: 16g
+    mem_reservation: 8g
+    cpus: 8.0
+    
+    # Labels for container management
+    labels:
+      - "com.healthcare.service=vlm-api"
+      - "com.healthcare.environment=production"
+      - "com.healthcare.compliance=hipaa"
+
+  # Redis Cache for Model Caching and Session Management
+  redis-cache:
+    image: redis:7-alpine
+    container_name: healthcare-redis
+    restart: unless-stopped
+    
+    # Redis configuration
+    command: redis-server --appendonly yes --maxmemory 2gb --maxmemory-policy allkeys-lru
+    
+    # Volume for persistence
+    volumes:
+      - redis_data:/data
+    
+    # Port mapping (internal only)
+    expose:
+      - "6379"
+    
+    # Health check
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    
+    # Networking
+    networks:
+      - healthcare-network
+    
+    # Resource limits
+    mem_limit: 2g
+    cpus: 2.0
+    
+    # Logging
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+
+  # Monitoring and Metrics Collection
+  monitoring:
+    image: prom/prometheus:latest
+    container_name: healthcare-monitoring
+    restart: unless-stopped
+    
+    # Configuration
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    
+    # Port mapping
+    ports:
+      - "9090:9090"
+    
+    # Command override
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.enable-lifecycle'
+    
+    # Networking
+    networks:
+      - healthcare-network
+    
+    # Resource limits
+    mem_limit: 1g
+    cpus: 1.0
+
+  # Log Aggregation (Optional)
+  log-aggregator:
+    image: fluent/fluentd:v1.16-debian-1
+    container_name: healthcare-logs
+    restart: unless-stopped
+    
+    # Configuration
+    volumes:
+      - ./logging/fluent.conf:/fluentd/etc/fluent.conf:ro
+      - fluentd_logs:/var/log/fluentd
+    
+    # Port mapping
+    ports:
+      - "24224:24224"
+      - "24224:24224/udp"
+    
+    # Networking
+    networks:
+      - healthcare-network
+    
+    # Environment
+    environment:
+      - FLUENTD_CONF=fluent.conf
+    
+    # Resource limits  
+    mem_limit: 512m
+    cpus: 1.0
+
+  # Load Balancer (for multi-instance deployment)
+  load-balancer:
+    image: nginx:alpine
+    container_name: healthcare-lb
+    restart: unless-stopped
+    
+    # Configuration
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+    
+    # Port mapping
+    ports:
+      - "80:80"
+      - "443:443"
+    
+    # Networking
+    networks:
+      - healthcare-network
+    
+    # Dependency
+    depends_on:
+      - healthcare-vlm-api
+    
+    # Health check
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    
+    # Resource limits
+    mem_limit: 256m
+    cpus: 0.5
+
+# Network configuration
+networks:
+  healthcare-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+# Volume configuration for persistent data
+volumes:
+  # Model storage volumes
+  healthcare_models:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./volumes/models
+  
+  healthcare_onnx_models:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind 
+      device: ./volumes/onnx_models
+  
+  healthcare_tensorrt_engines:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./volumes/tensorrt_engines
+  
+  # Application data volumes
+  healthcare_logs:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./volumes/logs
+  
+  healthcare_cache:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./volumes/cache
+  
+  healthcare_sample_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./sample_data
+  
+  healthcare_results:
+    driver: local
+  
+  healthcare_benchmarks:
+    driver: local
+  
+  # Infrastructure volumes
+  redis_data:
+    driver: local
+  
+  prometheus_data:
+    driver: local
+  
+  fluentd_logs:
+    driver: local
+
+# Additional configuration files needed:
+# - ./monitoring/prometheus.yml
+# - ./logging/fluent.conf  
+# - ./nginx/nginx.conf
+# - ./nginx/ssl/ (SSL certificates)
+
+# Deployment commands:
+# docker-compose up -d                 # Start all services
+# docker-compose logs healthcare-vlm-api  # View API logs
+# docker-compose exec healthcare-vlm-api bash  # Access container
+# docker-compose down                  # Stop all services
+# docker-compose pull && docker-compose up -d  # Update deployment
+
+# Scaling commands:
+# docker-compose up -d --scale healthcare-vlm-api=3  # Scale API instances
+
+# Monitoring:
+# http://localhost:9090     # Prometheus metrics
+# http://localhost/health   # Load balancer health
+# docker-compose ps         # Service status
