@@ -1,0 +1,26 @@
+{
+  "huggingface": {
+    "perplexity": 8.2,
+    "bleu_score": 0.445,
+    "rouge_l": 0.387,
+    "coherence_score": 0.892
+  },
+  "tensorrt_fp16": {
+    "perplexity": 8.3,
+    "bleu_score": 0.443,
+    "rouge_l": 0.385,
+    "coherence_score": 0.889
+  },
+  "tensorrt_int8": {
+    "perplexity": 8.6,
+    "bleu_score": 0.438,
+    "rouge_l": 0.381,
+    "coherence_score": 0.882
+  },
+  "tensorrt_int4": {
+    "perplexity": 9.2,
+    "bleu_score": 0.425,
+    "rouge_l": 0.371,
+    "coherence_score": 0.865
+  }
+}

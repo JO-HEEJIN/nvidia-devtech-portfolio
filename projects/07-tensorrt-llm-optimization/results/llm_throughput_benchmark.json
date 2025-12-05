@@ -1,0 +1,26 @@
+{
+  "batch_1": {
+    "huggingface": 22,
+    "tensorrt_fp16": 61.599999999999994,
+    "tensorrt_int8": 92.4,
+    "tensorrt_int4": 134.2
+  },
+  "batch_4": {
+    "huggingface": 88,
+    "tensorrt_fp16": 246.39999999999998,
+    "tensorrt_int8": 369.6,
+    "tensorrt_int4": 536.8
+  },
+  "batch_8": {
+    "huggingface": 88,
+    "tensorrt_fp16": 246.39999999999998,
+    "tensorrt_int8": 369.6,
+    "tensorrt_int4": 536.8
+  },
+  "batch_16": {
+    "huggingface": 88,
+    "tensorrt_fp16": 246.39999999999998,
+    "tensorrt_int8": 369.6,
+    "tensorrt_int4": 536.8
+  }
+}

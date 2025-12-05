@@ -1,0 +1,20 @@
+{
+  "224x224": {
+    "pytorch": 120,
+    "onnx": 78.0,
+    "tensorrt_fp16": 42.0,
+    "tensorrt_int8": 30.0
+  },
+  "512x512": {
+    "pytorch": 180,
+    "onnx": 117.0,
+    "tensorrt_fp16": 62.99999999999999,
+    "tensorrt_int8": 45.0
+  },
+  "1024x1024": {
+    "pytorch": 280,
+    "onnx": 182.0,
+    "tensorrt_fp16": 98.0,
+    "tensorrt_int8": 70.0
+  }
+}
