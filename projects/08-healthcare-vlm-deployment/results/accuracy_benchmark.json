@@ -1,0 +1,22 @@
+{
+  "pytorch": {
+    "similarity_score": 0.923,
+    "medical_accuracy": 0.918,
+    "clinical_relevance": 0.912
+  },
+  "onnx": {
+    "similarity_score": 0.921,
+    "medical_accuracy": 0.916,
+    "clinical_relevance": 0.91
+  },
+  "tensorrt_fp16": {
+    "similarity_score": 0.92,
+    "medical_accuracy": 0.915,
+    "clinical_relevance": 0.908
+  },
+  "tensorrt_int8": {
+    "similarity_score": 0.915,
+    "medical_accuracy": 0.91,
+    "clinical_relevance": 0.905
+  }
+}

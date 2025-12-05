@@ -1,0 +1,26 @@
+{
+  "seq_128": {
+    "huggingface": 45,
+    "tensorrt_fp16": 15.749999999999998,
+    "tensorrt_int8": 9.9,
+    "tensorrt_int4": 6.75
+  },
+  "seq_512": {
+    "huggingface": 52,
+    "tensorrt_fp16": 18.2,
+    "tensorrt_int8": 11.44,
+    "tensorrt_int4": 7.8
+  },
+  "seq_1024": {
+    "huggingface": 58,
+    "tensorrt_fp16": 20.299999999999997,
+    "tensorrt_int8": 12.76,
+    "tensorrt_int4": 8.7
+  },
+  "seq_2048": {
+    "huggingface": 65,
+    "tensorrt_fp16": 22.75,
+    "tensorrt_int8": 14.3,
+    "tensorrt_int4": 9.75
+  }
+}

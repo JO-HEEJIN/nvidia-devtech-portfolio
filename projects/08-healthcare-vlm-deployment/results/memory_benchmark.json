@@ -1,0 +1,18 @@
+{
+  "pytorch": {
+    "allocated_gb": 2.1,
+    "reserved_gb": 2.5
+  },
+  "onnx": {
+    "allocated_gb": 1.6,
+    "reserved_gb": 1.9
+  },
+  "tensorrt_fp16": {
+    "allocated_gb": 1.2,
+    "reserved_gb": 1.4
+  },
+  "tensorrt_int8": {
+    "allocated_gb": 0.8,
+    "reserved_gb": 1.0
+  }
+}
