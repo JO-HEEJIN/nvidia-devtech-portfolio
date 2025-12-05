@@ -15,7 +15,7 @@ GPU_ARCH = -gencode arch=compute_70,code=sm_70 \
 
 # Compilation flags
 NVCC_FLAGS = $(GPU_ARCH) -O3 -std=c++14 -lineinfo
-CXX_FLAGS = -O3 -std=c++14 -fopenmp
+CXX_FLAGS = -O3 -std=c++14 -Xcompiler -fopenmp
 DEBUG_FLAGS = -g -G -O0 -DDEBUG
 
 # Include and library paths
@@ -30,14 +30,16 @@ BIN_DIR = bin
 # Create directories
 $(shell mkdir -p $(OBJ_DIR) $(BIN_DIR))
 
-# Targets
-TARGETS = $(BIN_DIR)/cpu_matmul \
-          $(BIN_DIR)/naive_matmul \
+# Targets (GPU only - cpu_matmul requires OpenMP which may not be available)
+TARGETS = $(BIN_DIR)/naive_matmul \
           $(BIN_DIR)/tiled_matmul \
           $(BIN_DIR)/optimized_matmul \
           $(BIN_DIR)/benchmark
 
 all: $(TARGETS)
+
+# CPU baseline (optional - requires OpenMP)
+cpu: $(BIN_DIR)/cpu_matmul
 
 # CPU baseline
 $(BIN_DIR)/cpu_matmul: $(SRC_DIR)/cpu_matmul.cpp $(SRC_DIR)/utils.cu
@@ -55,13 +57,13 @@ $(BIN_DIR)/tiled_matmul: $(SRC_DIR)/tiled_matmul.cu $(SRC_DIR)/utils.cu
 $(BIN_DIR)/optimized_matmul: $(SRC_DIR)/optimized_matmul.cu $(SRC_DIR)/utils.cu
 	$(NVCC) $(NVCC_FLAGS) $(INCLUDES) $^ -o $@ $(LIBS)
 
-# Benchmark suite
-$(BIN_DIR)/benchmark: $(SRC_DIR)/benchmark.cu $(SRC_DIR)/utils.cu
-	$(NVCC) $(NVCC_FLAGS) $(INCLUDES) $^ -o $@ $(LIBS)
+# Benchmark suite - needs all kernel files for linking
+$(BIN_DIR)/benchmark: $(SRC_DIR)/benchmark.cu $(SRC_DIR)/utils.cu $(SRC_DIR)/naive_matmul.cu $(SRC_DIR)/tiled_matmul.cu $(SRC_DIR)/optimized_matmul.cu
+	$(NVCC) $(NVCC_FLAGS) $(INCLUDES) -DBENCHMARK_MODE $^ -o $@ $(LIBS)
 
 # Debug builds
 debug: NVCC_FLAGS = $(GPU_ARCH) $(DEBUG_FLAGS) -std=c++14
-debug: CXX_FLAGS = $(DEBUG_FLAGS) -std=c++14 -fopenmp
+debug: CXX_FLAGS = $(DEBUG_FLAGS) -std=c++14 -Xcompiler -fopenmp
 debug: all
 
 # Individual debug targets

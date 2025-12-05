@@ -151,6 +151,7 @@ __global__ void tiledMatrixMultiplyKernelOptimized(
     }
 }
 
+#ifndef BENCHMARK_MODE
 int main(int argc, char** argv) {
     // Parse command line
     int N = 1024;
@@ -321,6 +322,7 @@ int main(int argc, char** argv) {
     freeDeviceMatrices(d_A, d_B, d_C);
     
     printf("\nTiled CUDA implementation complete.\n");
-    
+
     return 0;
 }
+#endif // BENCHMARK_MODE
