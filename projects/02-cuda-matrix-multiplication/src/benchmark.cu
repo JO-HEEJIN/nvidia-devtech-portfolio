@@ -20,10 +20,10 @@ void printPerformanceSummary(const char* kernelName, int N, float time_ms);
 // Import kernels from other files
 extern __global__ void naiveMatrixMultiplyKernel(float* A, float* B, float* C, int N);
 
-template <int TILE_WIDTH>
+template <int TIL_WIDTH>
 extern __global__ void tiledMatrixMultiplyKernel(float* A, float* B, float* C, int N);
 
-template <int BLOCK_SIZE, int WORK_PER_THREAD>
+template <int BLK_SIZE, int WORK_PER_THREAD>
 extern __global__ void optimizedMatrixMultiplyKernel(
     const float* __restrict__ A,
     const float* __restrict__ B,
@@ -127,10 +127,10 @@ BenchmarkResult benchmarkTiledCUDA(Matrix d_A, Matrix d_B, Matrix d_C, int N, in
     BenchmarkResult result;
     result.name = "Tiled CUDA (16x16)";
     
-    const int TILE_SIZE = 16;
-    dim3 blockDim(TILE_SIZE, TILE_SIZE);
-    dim3 gridDim((N + TILE_SIZE - 1) / TILE_SIZE,
-                 (N + TILE_SIZE - 1) / TILE_SIZE);
+    const int TIL_SIZE = 16;
+    dim3 blockDim(TIL_SIZE, TIL_SIZE);
+    dim3 gridDim((N + TIL_SIZE - 1) / TIL_SIZE,
+                 (N + TIL_SIZE - 1) / TIL_SIZE);
     
     // Warmup
     for (int i = 0; i < 3; i++) {
@@ -156,7 +156,7 @@ BenchmarkResult benchmarkTiledCUDA(Matrix d_A, Matrix d_B, Matrix d_C, int N, in
     result.time_ms /= iterations;
     result.gflops = calculateGFLOPS(N, result.time_ms);
     
-    size_t memoryOps = (2L * N * N * N / TILE_SIZE + N * N) * sizeof(float);
+    size_t memoryOps = (2L * N * N * N / TIL_SIZE + N * N) * sizeof(float);
     result.bandwidth_gb = calculateBandwidth(memoryOps, result.time_ms);
     
     CUDA_CHECK(cudaEventDestroy(start));
@@ -170,13 +170,13 @@ BenchmarkResult benchmarkOptimizedCUDA(Matrix d_A, Matrix d_B, Matrix d_C, int N
     BenchmarkResult result;
     result.name = "Optimized CUDA";
     
-    const int BLOCK_SIZE = 32;
+    const int BLK_SIZE = 32;
     const int WORK_PER_THREAD = 4;
-    int threads = BLOCK_SIZE / WORK_PER_THREAD;
+    int threads = BLK_SIZE / WORK_PER_THREAD;
     
     dim3 blockDim(threads, threads);
-    dim3 gridDim((N + BLOCK_SIZE - 1) / BLOCK_SIZE,
-                 (N + BLOCK_SIZE - 1) / BLOCK_SIZE);
+    dim3 gridDim((N + BLK_SIZE - 1) / BLK_SIZE,
+                 (N + BLK_SIZE - 1) / BLK_SIZE);
     
     // Warmup
     for (int i = 0; i < 3; i++) {
@@ -202,7 +202,7 @@ BenchmarkResult benchmarkOptimizedCUDA(Matrix d_A, Matrix d_B, Matrix d_C, int N
     result.time_ms /= iterations;
     result.gflops = calculateGFLOPS(N, result.time_ms);
     
-    size_t memoryOps = (2L * N * N * N / BLOCK_SIZE + N * N) * sizeof(float);
+    size_t memoryOps = (2L * N * N * N / BLK_SIZE + N * N) * sizeof(float);
     result.bandwidth_gb = calculateBandwidth(memoryOps, result.time_ms);
     
     CUDA_CHECK(cudaEventDestroy(start));

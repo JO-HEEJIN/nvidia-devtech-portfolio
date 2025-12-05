@@ -83,6 +83,7 @@ void launchNaiveKernelCoalesced(Matrix d_A, Matrix d_B, Matrix d_C, dim3 grid, d
         d_A.elements, d_B.elements, d_C.elements, d_A.width);
 }
 
+#ifndef BENCHMARK_MODE
 int main(int argc, char** argv) {
     // Parse command line
     int N = 1024;
@@ -221,6 +222,7 @@ int main(int argc, char** argv) {
     freeDeviceMatrices(d_A, d_B, d_C);
     
     printf("\nNaive CUDA implementation complete.\n");
-    
+
     return 0;
 }
+#endif // BENCHMARK_MODE
