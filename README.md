@@ -18,13 +18,6 @@ nvidia-devtech-portfolio/
 │   ├── 06-cuda-image-processing/
 │   ├── 07-tensorrt-llm-optimization/
 │   └── 08-healthcare-vlm-deployment/
-├── interview-prep/                 # Interview preparation
-│   ├── cuda/
-│   ├── ai-optimization/
-│   ├── coding/
-│   └── behavioral/
-├── resume/                         # Resume preparation
-├── cover-letter/                   # Cover letter drafts
 ├── website-redesign/               # Portfolio website redesign
 ├── docs/                           # Documentation and resources
 └── PROGRESS.md                     # Overall progress tracker
