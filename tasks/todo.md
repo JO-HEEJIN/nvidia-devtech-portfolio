@@ -105,8 +105,34 @@ removed invented ones or marked them "not measured". Commits authored as
 - [x] `projects/08.../README.md` line ~75: removed an unmeasured "Sub-50ms latency"
       claim under "Clinical Workflow Integration".
 
-## Verification phase — run after the force-push, see chat for results
-(not yet run — blocked on the force-push decision above)
+## Verification phase — DONE
+
+- [x] Force-pushed rewritten history + cleanup commit to origin/main. (First two
+      push attempts failed with a raw HTTP 400 over HTTP/2 — unrelated to content;
+      forcing HTTP/1.1 fixed it and the push succeeded.)
+- [x] Cloned the repo fresh from the public URL, no credentials.
+- [x] Confirmed resume/cover-letter/interview-prep absent from the fresh clone's
+      current branch AND from `git log --all` (zero commits touch those paths).
+- [x] Field-by-field: every number in conclusions.md matches demo_benchmark.json
+      exactly (GPU, TensorRT version, batch 1/2/4 latencies and speedups). See chat
+      for the full table.
+- [x] Re-grepped all project READMEs in the fresh clone: numbers in 03/04/06/07's
+      tables are still present but now sit under an explicit "not measured" /
+      "hypotheses" disclaimer; 05's and 07's remaining bullet numbers are general
+      quantization/precision facts, not project-specific claims; 02 and 08 have zero
+      un-disclaimed numeric claims.
+- [x] Re-ran gitleaks + trufflehog on the fresh clone: same result as before the
+      rewrite — 0 real secrets (trufflehog: 0/0; gitleaks: 1 hit, a false positive on
+      the string `T5ForConditionalGeneration`, flagged purely on entropy).
+- [x] Commit authors: all commits are `<midmost44@gmail.com>`. **Discrepancy found,
+      not silently fixed:** some pre-existing historical commits (from before this
+      session) are authored as `momo <midmost44@gmail.com>` rather than
+      `JO-HEEJIN <midmost44@gmail.com>` — same email, different name. This predates
+      this session; the commit this session created is correctly `JO-HEEJIN
+      <midmost44@gmail.com>`. No AI-attribution lines found in any commit message.
+- [x] Confirmed `projects/02-cuda-matrix-multiplication` path unchanged (Kaggle
+      notebook dependency intact).
+- [x] Cleaned up the temporary verification clone and scratch files afterward.
 
 ## Review section
 
@@ -129,11 +155,10 @@ session. The other two required far more than expected:
    each time scope expanded beyond the original three items.
 
 ### What's left
-- **Force-push the rewritten history to origin/main** — needs final explicit
-  go-ahead (see chat); nothing has been pushed yet.
-- After that: run the verification phase (fresh clone, field-by-field table,
-  gitleaks/trufflehog re-run, commit author check, Kaggle path check) and report
-  results, including any discrepancies, in chat.
+- Nothing from this task. The repo is pushed and verified from a fresh, credential-less
+  clone. One pre-existing discrepancy was found and reported, not fixed: some commits
+  from before this session are authored as `momo <midmost44@gmail.com>` instead of
+  `JO-HEEJIN <midmost44@gmail.com>`. Decide if that's worth a separate history edit.
 
 ### Close-out checklist (per repo-wide documentation lifecycle rules)
 - [ ] CONTEXT.md updated in the same commit? — N/A, this repo has no CONTEXT.md and
