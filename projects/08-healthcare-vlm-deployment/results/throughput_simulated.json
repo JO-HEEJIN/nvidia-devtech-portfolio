@@ -1,4 +1,5 @@
 {
+  "_disclaimer": "Simulated output from test_optimization_pipeline.py, not a measured benchmark.",
   "batch_1": {
     "pytorch": 8,
     "onnx": 14.4,

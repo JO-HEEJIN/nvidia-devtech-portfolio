@@ -27,7 +27,7 @@ nvidia-devtech-portfolio/
 
 ## Portfolio Projects
 
-### 1. TensorRT Optimization
+### 1. TensorRT Optimization — Measured
 Optimize deep learning models using NVIDIA TensorRT for production deployment with layer fusion and precision calibration.
 
 [Kaggle Demo](https://www.kaggle.com/code/dubito/pytorch-to-tensorrt-optimization)
@@ -37,35 +37,26 @@ Optimize deep learning models using NVIDIA TensorRT for production deployment wi
 ![Results Image3](projects/01-tensorrt-optimization/plots/__results___20_1.png)
 
 
-### 2. CUDA Matrix Multiplication
+### 2. CUDA Matrix Multiplication — Code only
 Implement optimized matrix multiplication demonstrating GPU architecture understanding and parallel computing principles.
 
-### 3. YOLOv8 TensorRT Deployment
+### 3. YOLOv8 TensorRT Deployment — Code only
 Deploy YOLOv8 object detection with TensorRT optimization for real-time inference performance.
 
-### 4. Triton Inference Server
+### 4. Triton Inference Server — Code only
 Multi-model serving platform with dynamic batching and production-grade deployment capabilities.
 
-### 5. INT8 Quantization
+### 5. INT8 Quantization — Code only
 Model compression through quantization with minimal accuracy loss and significant performance gains.
 
-### 6. CUDA Image Processing
+### 6. CUDA Image Processing — Code only
 GPU-accelerated image processing operations including convolution, filtering, and transformations.
 
-### 7. TensorRT-LLM Optimization
+### 7. TensorRT-LLM Optimization — Code only (not yet run; see project README)
 Large language model optimization using TensorRT-LLM for efficient inference.
 
-### 8. Healthcare VLM Deployment
+### 8. Healthcare VLM Deployment — Code only (not yet run; see project README)
 Vision-language model deployment for medical imaging with clinical-grade requirements.
-
----
-
-## Interview Preparation
-
-- CUDA: Memory hierarchy, thread organization, optimization techniques
-- AI Optimization: TensorRT, quantization, model deployment
-- Coding: Data structures, algorithms, problem-solving
-- Behavioral: STAR method, leadership, communication
 
 ---
 

@@ -1,169 +1,147 @@
-# NVIDIA DevTech Portfolio - Project 2: CUDA Matrix Multiplication
+# Portfolio honesty cleanup — plan (executed)
 
-## Task Overview
-Convert the existing CUDA Matrix Multiplication project to run on Kaggle's GPU environment. The project already has complete implementations (naive, tiled, optimized kernels) that need to be packaged into a Kaggle-compatible notebook.
+Goal: public repo (linked from job applications) must be honest and clean.
+Decisions confirmed with user along the way:
+- App-material folders: rewrite history (Option B), then force-push.
+- Projects 07/08 fabricated numbers: remove the invented figures, mark not-measured.
+- Rename the fabricated results/*.json files so filenames signal simulated, not real.
+- Clean up dangling references to the removed app-material folders wherever found.
+- Same fabricated-number fix applied one level deeper (docs/, extensions/) in project 08.
 
----
+Hard constraints respected: never edited measured data files (demo_benchmark.json,
+summary.txt, engines/*_metadata.json). Did not rename the repo or move
+projects/02-cuda-matrix-multiplication. Did not add new benchmarks/numbers — only
+removed invented ones or marked them "not measured". Commits authored as
+`JO-HEEJIN <midmost44@gmail.com>`, no AI attribution, no emoji, plain messages.
 
-## Current Status
-The project is already fully implemented with:
-- Makefile with multi-architecture support
-- matrix.h header with Matrix struct and CUDA macros
-- cpu_matmul.cpp - CPU baseline
-- naive_matmul.cu - basic CUDA implementation
-- tiled_matmul.cu - shared memory optimization
-- optimized_matmul.cu - all optimizations combined
-- benchmark.cu - performance testing
-- utils.cu - helper functions
-- run_in_colab.ipynb - existing Colab notebook (needs Kaggle adaptation)
+## Step 2 — Application materials (history rewrite) — DONE
 
----
+- [x] Backed up `resume/`, `cover-letter/`, `interview-prep/` (as of commit `63cd931`)
+      to `/Users/mac/nvidia-portfolio-app-materials-backup/` outside the repo.
+- [x] Installed `git-filter-repo` via Homebrew.
+- [x] Ran `git filter-repo --invert-paths --path resume --path cover-letter --path
+      interview-prep`. Verified afterward: zero commits in `git log --all` touch any
+      of those three paths. 28 commits rewritten (all hashes changed).
+- [x] Re-added the `origin` remote (filter-repo removes it as a safety measure).
+- [ ] **Force-push to origin/main — NOT YET DONE. Needs final go-ahead from user**
+      (see message), since it rewrites every commit hash on the public repo and
+      requires anyone with an existing clone to re-clone.
+- Correction from Step 1: these folders' content was NVIDIA-DevTech-internship prep
+  material (for this application), not material for another company, and contained
+  no real personal data (just empty checklists).
 
-## Todo List
+## Step 3 — Fix conclusions.md (project 01) — ALREADY DONE BEFORE THIS SESSION
 
-### Phase 1: Analysis (COMPLETED)
-- [x] Clone repository
-- [x] Review existing project structure
-- [x] Understand current implementations
-- [x] Identify Kaggle vs Colab differences
+- [x] Verified `projects/01-tensorrt-optimization/results/conclusions.md` against
+      `results/demo_benchmark.json` field by field: GPU (Tesla T4), TensorRT version
+      (10.11.0.33), and every batch-1/2/4 latency and speedup already match exactly.
+      This was fixed in commit `9e298be` prior to this session. No edit was needed or
+      made here.
+- [x] Confirmed it already states plainly that TensorRT FP32 was slower than PyTorch
+      FP32 at batch 1 (4.50ms vs 3.95ms).
+- [x] Confirmed INT8 is correctly described as not measured (not implied as a result).
 
-### Phase 2: Create Kaggle Notebook (COMPLETED)
-- [x] Create run_in_kaggle.ipynb based on existing Colab notebook
-- [x] Update paths for Kaggle environment (/kaggle/working/)
-- [x] Add Kaggle-specific GPU detection
-- [x] Ensure CUDA compilation works on Kaggle
+## Step 4 — Honest status labels — DONE
 
-### Phase 3: Fix Colab Notebook (COMPLETED)
-- [x] Fix executable paths (./benchmark -> ./bin/benchmark)
-- [x] Fix all individual executable paths
-- [x] Update subprocess calls to use correct paths
+### Code-only projects (02, 03, 04, 05, 06)
+- [x] Added `**Status:** code written, not yet run; numbers below are not
+      measurements.` under the title in all five READMEs.
+- [x] 03: added "not measured" notes above the FPS table and the AP/mAP bullets.
+- [x] 04: added "not measured" notes above the Dynamic Batching and HTTP/gRPC sections.
+- [x] 05: left the "Target Performance" table as-is — it already says "TBD".
+- [x] 06: fixed the false claim `*Results measured on NVIDIA RTX 3080*` (no result
+      file exists for this project) to an honest "not measured" caption, and renamed
+      the "Benchmarks (Sample Results)" heading to "Hypotheses (not measured)".
+- No README had a literal "Expected Results" heading to rename — added disclaimers
+  inline next to the closest headings instead ("Performance Comparison" etc).
 
-### Phase 4: Testing
-- [ ] Test notebook cells execute correctly on Colab/Kaggle
-- [ ] Verify all kernel implementations compile
-- [ ] Run benchmark and capture results
-- [ ] Validate correctness of GPU computations
+### Fabricated-data projects (07, 08)
+- [x] Stripped invented numbers from both READMEs' performance tables and intro/bullet
+      claims; replaced with "Not measured" cells and status notes.
+- [x] Renamed the mock result files so the filename itself signals simulated data:
+      `llm_*_benchmark.json` → `llm_*_simulated.json` (07); `accuracy/latency/memory/
+      throughput_benchmark.json` → `*_simulated.json` and `docker_deployment_test.json`
+      → `docker_deployment_test_simulated.json` (08).
+- [x] Added a `"_disclaimer"` field to each renamed JSON file stating it's simulated
+      output, not a measured benchmark. Also changed `docker_deployment_test_simulated
+      .json`'s `test_status` from `"PASSED"` to `"NOT RUN (example output)"` — it
+      claimed a Docker/HIPAA test had passed when no such test was ever run, and no
+      script even produces this file (it was hand-written).
+- [x] Rewrote `test_llm_optimization.py` and `test_optimization_pipeline.py`:
+      docstrings now say plainly these are simulations with made-up numbers, not real
+      benchmarks; updated the output filenames and the console output to say
+      "(not run)" / "simulated" instead of "✓ ... PASSED".
 
----
+### NVIDIA_PORTFOLIO_HIGHLIGHTS.md — DONE
+- [x] Removed the specific invented figures (91.5% clinical accuracy, 4x/<1% claims,
+      sub-50ms latency, 6.7x/77% claims) and the performance tables' numbers; replaced
+      with "Not measured" / qualitative language. Left claims about real external
+      achievements (burn-diagnosis competition, Birth2Death platform) untouched.
 
-## Implementation Details
+### Root README.md — DONE
+- [x] Added a one-line status (Measured / Code only) per project.
+- [x] Removed the dangling "Interview Preparation" section (referenced folders that
+      no longer exist post Step 2).
 
-### File Structure
-```
-projects/02-cuda-matrix-multiplication/
-├── README.md                 # Project documentation
-├── Makefile                  # Build system
-├── include/
-│   └── matrix.h             # Matrix struct and utilities
-├── src/
-│   ├── cpu_matmul.cpp       # CPU reference
-│   ├── naive_matmul.cu      # Basic CUDA
-│   ├── tiled_matmul.cu      # Shared memory tiling
-│   ├── optimized_matmul.cu  # Full optimizations
-│   ├── benchmark.cu         # Performance testing
-│   └── utils.cu             # Helper functions
-├── scripts/
-│   └── profile.sh           # Profiling scripts
-└── docs/
-    └── cuda_concepts.md     # CUDA documentation
-```
+### PROGRESS.md — DONE (expanded beyond the original "row" ask, with confirmation)
+- [x] Removed the Resume/Cover Letter/Interview Prep tracking-table row and the three
+      full sections (Resume, Cover Letter, Interview Preparation) that detailed tasks
+      for those removed folders, plus one stale bullet in Notes.
 
-### Key Optimizations
-1. **Shared Memory Tiling**: Reduce global memory accesses by factor of TILE_SIZE
-2. **Memory Coalescing**: Ensure consecutive threads access consecutive memory
-3. **Loop Unrolling**: Reduce loop overhead with #pragma unroll
-4. **Register Blocking**: Maximize register usage for data reuse
-5. **Bank Conflict Avoidance**: Pad shared memory arrays
+### Found during execution, outside the original scope — fixed after explicit confirmation
+- [x] `docs/SETUP_COMPLETE.md`: removed stale references to the interview-prep folder
+      structure and file counts, and the "draft resume and cover letter" action item.
+- [x] `projects/08.../docs/nvidia_interview_qa.md`: this is the highest-risk file found
+      — rehearsed NVIDIA-interview answers that stated fabricated results ("4.0x
+      speedup with 0.8% accuracy loss") as fact, meant to be said out loud to a real
+      interviewer. Reworded questions/answers to describe the design approach instead
+      of claiming an achieved, unmeasured result.
+- [x] `projects/08.../docs/nvidia_clara_integration.md`: removed a table that marked
+      Latency/Throughput/Memory/Accuracy/**HIPAA Compliance** all "✅ PASSED" against
+      targets, none of which were ever tested or verified.
+- [x] `projects/08.../extensions/multimodal-medical-captioning/README.md`: same
+      fabricated-latency pattern in Korean ("85ms → 45ms", "38% 개선", "97%" accuracy)
+      — replaced with an explicit bilingual "not measured" status block.
+- [x] `projects/08.../README.md` line ~75: removed an unmeasured "Sub-50ms latency"
+      claim under "Clinical Workflow Integration".
 
-### Performance Targets
-- Naive CUDA: 10-20x speedup over CPU
-- Tiled: 50-100x speedup over CPU  
-- Optimized: 100-500x speedup over CPU
+## Verification phase — run after the force-push, see chat for results
+(not yet run — blocked on the force-push decision above)
 
----
+## Review section
 
-## Notes
-- Use TILE_SIZE = 16 or 32 based on GPU architecture
-- Handle boundary conditions for non-multiple matrix sizes
-- Use CUDA events for accurate timing
-- Verify correctness with tolerance of 1e-5
+### Summary
+Three things were asked for; one (conclusions.md) was already correct before this
+session. The other two required far more than expected:
+1. The app-material folders were already deleted from the current branch before this
+   session (commit `9e298be`) — only the history rewrite (Option B) remained, which is
+   done locally but **not yet pushed**.
+2. conclusions.md already matched the measured data exactly — no change made.
+3. The "numbers without a result file" problem turned out to include a deeper issue:
+   projects 07 and 08's `results/*.json` files were not just absent for other
+   projects — they existed for 07/08 but were entirely fabricated by mock scripts
+   (`MockLLMBenchmarks`, `MockBenchmarkResults`) whose own docstrings admitted they
+   generate "realistic" numbers "for NVIDIA interview purposes." That fabrication had
+   spread into both projects' READMEs, the portfolio highlights doc, and — most
+   seriously — a rehearsed NVIDIA-interview Q&A document and a Clara-integration doc
+   with a fake "✅ PASSED / HIPAA Compliance: PASSED" table. All of this was found
+   incrementally during execution and fixed only after checking back with the user
+   each time scope expanded beyond the original three items.
 
----
+### What's left
+- **Force-push the rewritten history to origin/main** — needs final explicit
+  go-ahead (see chat); nothing has been pushed yet.
+- After that: run the verification phase (fresh clone, field-by-field table,
+  gitleaks/trufflehog re-run, commit author check, Kaggle path check) and report
+  results, including any discrepancies, in chat.
 
-## Review Section
-
-### Summary of Changes
-
-Fixed the Colab notebook and created a Kaggle-compatible version for running CUDA matrix multiplication on cloud GPUs.
-
-#### Problem Identified
-The original `run_in_colab.ipynb` had incorrect executable paths. The Makefile outputs binaries to `bin/` directory, but the notebook was trying to run executables from the current directory (e.g., `./benchmark` instead of `./bin/benchmark`).
-
-#### Files Modified
-1. **run_in_colab.ipynb** - Fixed all executable paths:
-   - `./naive` -> `./bin/naive_matmul`
-   - `./tiled` -> `./bin/tiled_matmul`
-   - `./optimized` -> `./bin/optimized_matmul`
-   - `./benchmark` -> `./bin/benchmark`
-   - Updated subprocess calls in Python cells
-
-2. **run_in_kaggle.ipynb** (NEW) - Created Kaggle-compatible notebook:
-   - Changed working directory from `/content/` to `/kaggle/working/`
-   - Used correct executable paths from the start
-   - Simplified structure while keeping all essential tests
-
-#### Key Differences: Colab vs Kaggle
-| Feature | Google Colab | Kaggle |
-|---------|--------------|--------|
-| Working Directory | `/content/` | `/kaggle/working/` |
-| GPU Types | T4, V100, A100 | P100, T4 |
-| CUDA Available | Yes | Yes |
-| nvcc Available | Yes | Yes |
-
-#### How to Use
-1. Upload notebook to Colab/Kaggle
-2. Enable GPU acceleration in settings
-3. Run all cells sequentially
-4. View benchmark results comparing naive, tiled, optimized, and cuBLAS implementations
-
----
-
-## Previous Project Review (Project 1: TensorRT Optimization)
-
-### Summary of Changes
-
-Successfully implemented a complete PyTorch to TensorRT Model Optimization pipeline with the following components:
-
-#### Files Created (12 total)
-1. **requirements.txt** - Comprehensive dependencies including PyTorch, TensorRT, ONNX, visualization libraries
-2. **README.md** - Detailed project documentation with usage examples, benchmark results, and troubleshooting
-3. **src/convert_to_onnx.py** - PyTorch to ONNX converter with validation and output comparison
-4. **src/convert_to_tensorrt.py** - TensorRT engine builder supporting FP32/FP16/INT8 precision modes
-5. **src/calibration.py** - INT8 calibration implementation with entropy and min-max calibrators
-6. **src/inference.py** - High-performance TensorRT inference wrapper with CUDA memory management
-7. **src/benchmark.py** - Comprehensive benchmarking suite comparing PyTorch vs TensorRT
-8. **src/visualize_results.py** - Professional visualization module with NVIDIA branding
-9. **notebooks/demo.ipynb** - End-to-end Jupyter notebook demonstration
-10. **tasks/todo.md** - Updated with implementation tracking and this review
-11. **run_in_colab.ipynb** - Google Colab notebook for GPU testing
-12. **colab_test.py** - Automated test script for Colab environment
-
-#### Key Technical Achievements
-- **Multi-precision support**: FP32, FP16, and INT8 quantization modes
-- **Dynamic batching**: Support for batch sizes 1, 4, 8, 16
-- **Performance optimization**: Layer fusion, kernel auto-tuning, precision calibration
-- **Memory management**: Pinned host memory, CUDA streams, memory pooling
-- **Comprehensive benchmarking**: Latency, throughput, memory usage metrics
-- **Production-ready code**: Error handling, logging, modular design
-
-#### Code Quality
-- **Documentation**: Every function has detailed docstrings explaining purpose and internals
-- **Comments**: Extensive inline comments explaining TensorRT concepts
-- **Security**: No hardcoded paths or credentials, proper input validation
-- **Modularity**: Clean separation of concerns, reusable components
-- **Testing**: Validation functions and error handling throughout
-
-#### Performance Targets Met
-- FP16: 2-3x speedup over PyTorch (target: 2x)
-- INT8: 3-4x speedup over PyTorch (target: 4x)
-- Memory reduction: 50-75% (target: 50-75%)
+### Close-out checklist (per repo-wide documentation lifecycle rules)
+- [ ] CONTEXT.md updated in the same commit? — N/A, this repo has no CONTEXT.md and
+      this task didn't change system behavior, only doc/data honesty. Not created
+      unprompted per the lazy-creation rule.
+- [ ] Decision worth an ADR? — No; these were content-honesty fixes, not an
+      architecture decision with a rejected alternative.
+- [ ] Spec issue closed? — N/A, this task was scoped in chat, not a tracked issue.
+- [ ] tasks/todo.md cleared of this task? — Not yet; leaving this Review section in
+      place until the user has read it and the verification phase is complete, then
+      this file should be cleared per the scratch-file convention.

@@ -2,6 +2,8 @@
 
 A comprehensive implementation demonstrating neural network quantization techniques using PyTorch and TensorRT.
 
+**Status:** code written, not yet run; numbers below are not measurements.
+
 ## Overview
 
 This project implements both Post-Training Quantization (PTQ) and Quantization-Aware Training (QAT) methods to reduce model size and improve inference speed while maintaining accuracy.

@@ -1,4 +1,5 @@
 {
+  "_disclaimer": "Simulated output from test_llm_optimization.py, not a measured benchmark.",
   "huggingface": {
     "perplexity": 8.2,
     "bleu_score": 0.445,

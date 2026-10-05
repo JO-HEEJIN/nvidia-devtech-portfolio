@@ -1,7 +1,8 @@
 {
+  "_disclaimer": "Simulated/hand-written example output, not a real deployment test run. No actual HIPAA verification or security audit was performed.",
   "docker_deployment_test": {
     "timestamp": "2024-12-05T14:30:00Z",
-    "test_status": "PASSED",
+    "test_status": "NOT RUN (example output)",
     "components": {
       "healthcare_vlm_api": {
         "status": "healthy",

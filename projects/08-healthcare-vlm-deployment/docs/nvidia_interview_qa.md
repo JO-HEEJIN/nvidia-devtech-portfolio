@@ -4,11 +4,15 @@
 
 This document provides comprehensive technical Q&A scenarios for NVIDIA interviews, focusing on medical AI optimization, TensorRT expertise, and Clara ecosystem integration.
 
+**Status:** this project's code has not been run on real hardware. Any specific numbers
+below (speedup, accuracy, memory reduction) came from an illustrative mock script, not
+a real benchmark — do not state them as achieved results in an actual interview.
+
 ---
 
 ## 🚀 TensorRT Optimization Questions
 
-### Q1: How did you achieve 4x speedup with TensorRT while maintaining medical accuracy?
+### Q1: How would you approach achieving speedup with TensorRT while maintaining medical accuracy?
 
 **Answer**: The key was medical domain-specific optimization:
 
@@ -37,7 +41,7 @@ class MedicalCalibrator(trt.IInt8EntropyCalibrator2):
 3. **Dynamic shape profiles**: Optimized for various medical image resolutions (224x224 to 1024x1024)
 4. **Domain-aware quantization**: Different strategies for radiology vs dermatology vs pathology
 
-**Results**: 4.0x speedup with 0.8% accuracy loss (91.8% → 91.0%), well within medical AI acceptance thresholds.
+**Status**: this pipeline has not been benchmarked yet. The design above targets a meaningful speedup with minimal accuracy loss, but no real number should be quoted until it's measured.
 
 ### Q2: Explain your approach to INT8 quantization for medical images.
 
@@ -203,7 +207,7 @@ class MedicalCUDAStreamManager:
 - **Memory pool management**: Separate pools for different clinical scenarios
 - **Async processing**: Non-blocking inference for concurrent medical cases
 
-### Q6: Explain your memory optimization for 77% memory reduction in LLM inference.
+### Q6: Explain your approach to memory optimization for LLM inference.
 
 **Answer**: Multi-faceted memory optimization approach:
 
@@ -217,7 +221,7 @@ class LLMMemoryOptimizer:
     def optimize_llm_memory(self, model_config):
         optimizations = []
         
-        # 1. Paged Attention (45% memory reduction)
+        # 1. Paged Attention (reduces KV cache memory, not yet measured here)
         paged_attention = self.kv_cache_manager.enable_paged_attention(
             page_size=16,  # 16 tokens per page
             max_pages=1024,
@@ -225,7 +229,7 @@ class LLMMemoryOptimizer:
         )
         optimizations.append(("paged_attention", paged_attention))
         
-        # 2. INT4 quantization (60% model size reduction)
+        # 2. INT4 quantization (reduces model size, not yet measured here)
         quantized_weights = self.quantization_engine.apply_int4_awq(
             model_weights=model_config.weights,
             calibration_data="medical_text_corpus",
@@ -244,9 +248,9 @@ class LLMMemoryOptimizer:
         return MemoryOptimizedConfig(optimizations)
 ```
 
-**Key techniques**:
-1. **Paged Attention**: Eliminated memory fragmentation, 45% KV cache reduction
-2. **INT4 AWQ quantization**: Advanced weight quantization with <5% quality loss
+**Key techniques (implemented, not yet benchmarked)**:
+1. **Paged Attention**: reduces memory fragmentation and KV cache size
+2. **INT4 AWQ quantization**: reduces weight memory with some quality trade-off
 3. **Dynamic batching**: Variable sequence length handling
 4. **Memory pool management**: Reduced allocation/deallocation overhead
 
@@ -399,7 +403,7 @@ class BurnDiagnosisExpertise:
 
 1. **Proven clinical success**: Championship victory demonstrates real-world medical AI capability
 2. **Production experience**: Birth2Death platform shows large-scale medical data handling
-3. **NVIDIA technology mastery**: 4x TensorRT speedup with maintained medical accuracy
+3. **NVIDIA technology application**: TensorRT optimization pipeline built for medical accuracy preservation (not yet benchmarked)
 4. **Clara ecosystem readiness**: Built-in compatibility with NVIDIA healthcare stack
 
 ```python
@@ -424,8 +428,8 @@ class MedicalAINVIDIAIntegration:
 
 **Value proposition**:
 - **Technical + Clinical**: Not just NVIDIA expertise, but medical domain mastery
-- **Proven results**: Championship victory + 4x performance optimization
-- **Production ready**: HIPAA-compliant, Clara-compatible, Docker-deployed
+- **Proven results**: Championship victory + ongoing TensorRT performance optimization work
+- **Design intent**: HIPAA-aware architecture, Clara-compatible design, Docker deployment scaffolding (not yet run in production)
 - **Immediate impact**: Can accelerate NVIDIA's healthcare AI initiatives with domain expertise
 
 ---

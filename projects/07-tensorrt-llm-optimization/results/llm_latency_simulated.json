@@ -1,4 +1,5 @@
 {
+  "_disclaimer": "Simulated output from test_llm_optimization.py, not a measured benchmark.",
   "seq_128": {
     "huggingface": 45,
     "tensorrt_fp16": 15.749999999999998,

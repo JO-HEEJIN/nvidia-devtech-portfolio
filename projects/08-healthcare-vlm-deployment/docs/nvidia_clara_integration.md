@@ -4,6 +4,9 @@
 
 This technical guide outlines the integration pathway between the Healthcare VLM Deployment project and NVIDIA Clara platform, demonstrating how our medical AI expertise from **AI Skin Burn Diagnosis Challenge** and **Birth2Death platform** aligns with Clara's clinical workflow ecosystem.
 
+**Status:** this project's code has not been run on real hardware. The performance
+table below is not measured — see the "Performance Integration" section.
+
 ## Clara Platform Overview
 
 ### Core Clara Components
@@ -350,14 +353,14 @@ class ClaraPACSIntegration:
 
 ### Clara-Optimized Performance Metrics
 
-**Current Performance vs Clara Targets**
+**Current Performance vs Clara Targets (not measured)**
 | Metric | Our Implementation | Clara Target | Status |
 |--------|-------------------|--------------|---------|
-| **Latency** | 42ms (TensorRT) | <50ms | ✅ PASSED |
-| **Throughput** | 89 images/sec | >60 images/sec | ✅ PASSED |
-| **Memory** | 1.2GB | <2GB | ✅ PASSED |
-| **Accuracy** | 91.5% | >90% | ✅ PASSED |
-| **HIPAA Compliance** | Full | Required | ✅ PASSED |
+| **Latency** | Not measured | <50ms | Not tested |
+| **Throughput** | Not measured | >60 images/sec | Not tested |
+| **Memory** | Not measured | <2GB | Not tested |
+| **Accuracy** | Not measured | >90% | Not tested |
+| **HIPAA Compliance** | Not verified | Required | Not tested |
 
 **Clara Performance Optimizations**
 ```python

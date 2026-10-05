@@ -2,6 +2,8 @@
 
 High-performance object detection pipeline using YOLOv8 with TensorRT optimization for real-time inference.
 
+**Status:** code written, not yet run; numbers below are not measurements.
+
 ## YOLOv8 Architecture Overview
 
 YOLOv8 is the latest iteration of the YOLO (You Only Look Once) family, featuring significant architectural improvements:
@@ -58,6 +60,8 @@ TensorRT provides several optimization techniques for accelerating deep learning
 - Optimized tensor layouts
 
 ## Performance Comparison
+
+*Hypotheses (not measured) — no result file backs the numbers below.*
 
 ### FPS Comparison Table (Batch Size = 1, Input Size = 640x640)
 
@@ -205,7 +209,7 @@ Detection examples showing various object classes with confidence scores and bou
 - **Indoor environments**: Furniture, electronics, people
 - **Nature scenes**: Animals, plants, outdoor objects
 
-Average precision metrics:
+Average precision metrics (hypotheses, not measured — no evaluation has been run):
 - Person: 89.5% AP
 - Vehicle: 91.2% AP
 - Common objects: 85.7% mAP

@@ -567,18 +567,23 @@ class ClaraIntegrationLayer:
         )
 ```
 
-### 3. **성능 최적화 결과**
+### 3. **성능 목표 (측정되지 않음 / Not measured)**
 ```markdown
-**Performance Metrics:**
-- DeepSeek-VL: 85ms → 45ms (TensorRT 최적화)
-- T5 Keyword Extraction: 120ms → 65ms 
-- BiomedCLIP: 45ms (기존 최적화 유지)
-- Total Pipeline: 250ms → 155ms (38% 개선)
+**Status:** 코드는 작성되었지만 실제 하드웨어에서 실행되지 않았습니다.
+아래 수치는 모두 목표치이며 측정된 결과가 아닙니다.
+(Code written, not yet run on real hardware. All figures below are targets,
+not measured results.)
 
-**Medical Accuracy:**
-- Caption Quality: 94% clinical relevance
-- Keyword Precision: 91% medical term accuracy  
-- Burn Classification: 97% severity assessment accuracy
+**Performance Targets (not measured):**
+- DeepSeek-VL: not measured
+- T5 Keyword Extraction: not measured
+- BiomedCLIP: not measured
+- Total Pipeline: not measured
+
+**Medical Accuracy (not measured):**
+- Caption Quality: not measured
+- Keyword Precision: not measured
+- Burn Classification: not measured
 ```
 
 ## 📁 Project Structure Extension

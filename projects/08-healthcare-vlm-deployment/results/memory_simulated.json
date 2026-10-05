@@ -1,4 +1,5 @@
 {
+  "_disclaimer": "Simulated output from test_optimization_pipeline.py, not a measured benchmark.",
   "pytorch": {
     "allocated_gb": 2.1,
     "reserved_gb": 2.5

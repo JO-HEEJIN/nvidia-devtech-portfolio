@@ -4,6 +4,8 @@
 
 High-performance GPU-accelerated image processing operations implemented in CUDA. This project demonstrates various optimization techniques including shared memory, texture memory, and vectorized operations to achieve significant speedup over CPU implementations.
 
+**Status:** code written, not yet run; numbers below are not measurements.
+
 ## Features
 
 ### Implemented Operations
@@ -55,7 +57,7 @@ High-performance GPU-accelerated image processing operations implemented in CUDA
 
 ## Performance Results
 
-### Benchmarks (Sample Results)
+### Hypotheses (not measured)
 
 | Operation | Image Size | CPU (OpenCV) | CUDA Naive | CUDA Optimized | Speedup |
 |-----------|------------|--------------|-------------|----------------|---------|
@@ -65,7 +67,7 @@ High-performance GPU-accelerated image processing operations implemented in CUDA
 | Histogram | 1920x1080 | 12.3ms | 3.4ms | 1.8ms | 6.8x |
 | Resize (2x) | 1920x1080 | 22.1ms | 4.2ms | 2.1ms | 10.5x |
 
-*Results measured on NVIDIA RTX 3080*
+*Not measured — hypothetical figures, no result file backs these numbers.*
 
 ## Project Structure
 

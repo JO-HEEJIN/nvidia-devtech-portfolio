@@ -11,9 +11,6 @@ Application Deadline: TBD
 | Category | Status | Progress | Priority |
 |----------|--------|----------|----------|
 | Portfolio Projects | Not Started | 1/8 | High |
-| Resume | Not Started | 60% | High |
-| Cover Letter | Not Started | 0% | High |
-| Interview Prep | In Progress | 5% | High |
 | Website Redesign | Not Started | 0% | Medium |
 | Documentation | Not Started | 20% | Low |
 
@@ -63,60 +60,6 @@ Application Deadline: TBD
 
 ---
 
-## Resume
-
-Status: Not Started
-
-Tasks:
-- [ ] Research NVIDIA DevTech role requirements
-- [ ] Identify relevant skills and experiences
-- [ ] Draft initial version
-- [ ] Tailor to NVIDIA DevTech position
-- [ ] Review and refine
-- [ ] Final version ready
-
----
-
-## Cover Letter
-
-Status: Not Started
-
-Tasks:
-- [ ] Research NVIDIA company culture and values
-- [ ] Identify key points to highlight
-- [ ] Draft initial version
-- [ ] Customize for DevTech role
-- [ ] Review and refine
-- [ ] Final version ready
-
----
-
-## Interview Preparation
-
-Status: In Progress
-
-### CUDA
-- [x] Core concepts documented
-- [x] Practice problems outlined
-- [x] Key questions prepared
-
-### AI Optimization
-- [x] TensorRT concepts covered
-- [x] Quantization techniques documented
-- [x] Deployment strategies outlined
-
-### Coding
-- [x] Data structures review plan
-- [x] Algorithm practice schedule
-- [x] Common problems listed
-
-### Behavioral
-- [x] STAR method framework
-- [x] Common questions prepared
-- [x] Questions to ask compiled
-
----
-
 ## Website Redesign (heejinjo.me)
 
 Status: Not Started
@@ -155,7 +98,6 @@ Tasks:
 ## Notes
 
 - All projects focus on NVIDIA technologies (TensorRT, CUDA, Triton)
-- Interview prep covers technical and behavioral aspects
 - Git repository initialized and ready for version control
 - Project structure designed for incremental progress
 

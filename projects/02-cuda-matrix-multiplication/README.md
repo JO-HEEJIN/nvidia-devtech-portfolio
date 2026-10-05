@@ -1,5 +1,7 @@
 # CUDA Matrix Multiplication
 
+**Status:** code written, not yet run; numbers below are not measurements.
+
 ## Overview
 
 Status: Not Started  

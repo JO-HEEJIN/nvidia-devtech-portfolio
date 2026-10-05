@@ -2,6 +2,8 @@
 
 Production-ready ML model serving using NVIDIA Triton Inference Server with dynamic batching, multi-backend support, and high-throughput inference capabilities.
 
+**Status:** code written, not yet run; numbers below are not measurements.
+
 ## Triton Architecture Overview
 
 ### Core Components
@@ -75,6 +77,8 @@ Production-ready ML model serving using NVIDIA Triton Inference Server with dyna
 
 ## Dynamic Batching Benefits
 
+*Hypotheses (not measured) — no result file backs the numbers in this section.*
+
 ### Throughput Optimization
 
 Dynamic batching automatically groups individual inference requests into batches to maximize GPU utilization:
@@ -105,6 +109,8 @@ dynamic_batching {
 | BERT-Base | 52 QPS | 320 QPS | 485 QPS | 9.3x |
 
 ## HTTP vs gRPC Performance Comparison
+
+*Hypotheses (not measured) — no result file backs the numbers in this section.*
 
 ### Protocol Characteristics
 
